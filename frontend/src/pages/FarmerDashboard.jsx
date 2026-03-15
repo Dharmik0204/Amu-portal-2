@@ -10,7 +10,7 @@ const FarmerDashboard = () => {
   const [prescriptions, setPrescriptions] = useState([]);
   
   const [newAnimal, setNewAnimal] = useState({ type: '', age: '', identifier: '' });
-  const [queryForm, setQueryForm] = useState({ vet_id: '', animal_id: '', text_message: '' });
+  const [queryForm, setQueryForm] = useState({ vet_id: '', animal_id: '', text_message: '', food_type: 'None' });
   
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -87,6 +87,7 @@ const FarmerDashboard = () => {
     formData.append('vet_id', queryForm.vet_id);
     formData.append('animal_id', queryForm.animal_id);
     formData.append('text_message', queryForm.text_message);
+    formData.append('food_type', queryForm.food_type);
     if (audioBlob) {
       formData.append('audio', audioBlob, 'recording.webm');
     }
@@ -95,7 +96,7 @@ const FarmerDashboard = () => {
       await api.post('/farmer/query', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setQueryForm({ vet_id: '', animal_id: '', text_message: '' });
+      setQueryForm({ vet_id: '', animal_id: '', text_message: '', food_type: 'None' });
       setAudioBlob(null);
       fetchData();
     } catch (err) {
@@ -166,6 +167,15 @@ const FarmerDashboard = () => {
                 <select className="input-field" value={queryForm.animal_id} onChange={(e) => setQueryForm({...queryForm, animal_id: e.target.value})} required>
                   <option value="">Choose an animal...</option>
                   {animals.map(a => <option key={a._id} value={a._id}>{a.identifier} ({a.type})</option>)}
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.875rem', fontWeight: '500' }}>Food Produced *</label>
+                <select className="input-field" value={queryForm.food_type} onChange={(e) => setQueryForm({...queryForm, food_type: e.target.value})} required>
+                  <option value="None">None</option>
+                  <option value="Milk">Milk</option>
+                  <option value="Meat">Meat</option>
                 </select>
               </div>
 

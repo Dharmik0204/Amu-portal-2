@@ -6,7 +6,7 @@ import api from '../api';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'farmer' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'farmer', mobile: '' });
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -101,6 +101,20 @@ const AuthPage = () => {
               required 
             />
           </div>
+
+          {!isLogin && (
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ fontSize: '0.875rem', fontWeight: '500', color: 'var(--text-dark)' }}>Mobile Number</label>
+              <input 
+                type="tel" 
+                className="input-field" 
+                placeholder="e.g. 9876543210" 
+                value={formData.mobile} 
+                onChange={(e) => setFormData({...formData, mobile: e.target.value})} 
+                required={!isLogin} 
+              />
+            </div>
+          )}
 
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ fontSize: '0.875rem', fontWeight: '500', color: 'var(--text-dark)' }}>Password</label>

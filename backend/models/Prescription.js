@@ -9,8 +9,11 @@ const prescriptionSchema = new mongoose.Schema({
   medicine_name: { type: String, required: true },
   dosage: { type: String, required: true },
   withdrawal_period: { type: String, required: true }, // e.g., "4 days"
-  risk_level: { type: String, enum: ['Safe Risk', 'Medium Risk', 'High Risk'], required: true },
-  status: { type: String, enum: ['SaveToMedical', 'Dispensed', 'Cleared'], default: 'SaveToMedical' }
+  food_type: { type: String, enum: ['Milk', 'Meat', 'None'], default: 'None' },
+  mrl_admin: { type: String, default: '0' },
+  lab_mrl: { type: String, default: '0' },
+  risk_level: { type: String, enum: ['Safe Risk', 'Medium Risk', 'High Risk', 'Safe', 'Low'], required: true },
+  status: { type: String, enum: ['SaveToMedical', 'Dispensed', 'Cleared', 'Pending'], default: 'SaveToMedical' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Prescription', prescriptionSchema);

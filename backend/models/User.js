@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
     type: String, 
     enum: ['farmer', 'vet', 'medical', 'admin'],
     required: true 
-  }
+  },
+  mobile: { type: String, required: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

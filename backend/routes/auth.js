@@ -8,18 +8,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, mobile } = req.body;
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ error: 'User already exists' });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ name, email, password: hashedPassword, role });
+    user = new User({ name, email, password: hashedPassword, role, mobile });
     await user.save();
 
     const token = jwt.sign({ id: user._id, role: user.role, name: user.name }, JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token, user: { id: user._id, name: user.name, email, role } });
+    res.json({ token, user: { id: user._id, name: user.name, email, role, mobile } });
   } catch (error) {
     console.error('Registration Error:', error);
     res.status(500).json({ error: 'Server error' });

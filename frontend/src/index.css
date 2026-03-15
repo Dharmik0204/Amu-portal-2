@@ -117,3 +117,9 @@ body {
 .badge-warning { background: #fef3c7; color: #92400e; }
 .badge-success { background: #d1fae5; color: #065f46; }
 .badge-default { background: #f1f5f9; color: #475569; }
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

@@ -6,6 +6,7 @@ const querySchema = new mongoose.Schema({
   animal_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal', required: true },
   text_message: { type: String },
   audio_url: { type: String },
+  food_type: { type: String, enum: ['Milk', 'Meat', 'None'], default: 'None' },
   status: { type: String, enum: ['Pending', 'Responded'], default: 'Pending' }
 }, { timestamps: true });
 

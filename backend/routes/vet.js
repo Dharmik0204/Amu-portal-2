@@ -39,7 +39,7 @@ router.get('/medical-stores', async (req, res) => {
 
 router.post('/prescription', async (req, res) => {
   try {
-    const { query_id, medical_store_id, medicine_name, dosage, withdrawal_period, risk_level } = req.body;
+    const { query_id, medical_store_id, medicine_name, dosage, withdrawal_period, risk_level, lab_mrl } = req.body;
     const query = await Query.findById(query_id);
     if (!query) return res.status(404).json({ error: 'Query not found' });
 
@@ -52,7 +52,9 @@ router.post('/prescription', async (req, res) => {
       medicine_name,
       dosage,
       withdrawal_period,
-      risk_level
+      risk_level,
+      food_type: query.food_type,
+      lab_mrl
     });
     await prescription.save();
     

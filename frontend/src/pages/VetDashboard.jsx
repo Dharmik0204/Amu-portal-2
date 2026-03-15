@@ -13,7 +13,8 @@ const VetDashboard = () => {
     medicine_name: '',
     dosage: '',
     withdrawal_period: '',
-    risk_level: 'Safe Risk'
+    risk_level: 'Safe Risk',
+    lab_mrl: ''
   });
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const VetDashboard = () => {
         ...prescriptionForm
       });
       setSelectedQuery(null);
-      setPrescriptionForm({ medical_store_id: '', medicine_name: '', dosage: '', withdrawal_period: '', risk_level: 'Safe Risk' });
+      setPrescriptionForm({ medical_store_id: '', medicine_name: '', dosage: '', withdrawal_period: '', risk_level: 'Safe Risk', lab_mrl: '' });
       fetchQueries();
     } catch (err) {
       console.error(err);
@@ -97,8 +98,9 @@ const VetDashboard = () => {
                   </span>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <span className="badge badge-success" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Stethoscope size={12} /> {q.animal_id?.type}</span>
+                  {q.food_type && q.food_type !== 'None' && <span className="badge badge-warning" style={{ color: '#92400e', backgroundColor: '#fef3c7' }}>Food: {q.food_type}</span>}
                   {q.text_message && <span className="badge badge-default" style={{ color: 'var(--primary-color)', backgroundColor: '#e6f4ef' }}>Text</span>}
                   {q.audio_url && <span className="badge badge-default" style={{ color: 'var(--text-dark)', backgroundColor: '#e2e8f0' }}>Audio</span>}
                 </div>
@@ -114,7 +116,7 @@ const VetDashboard = () => {
         </div>
 
         {/* Prescription Panel */}
-        <div className="card" style={{ height: 'calc(100vh - 150px)', display: 'flex', flexDirection: 'column' }}>
+        <div className="card" style={{ height: 'calc(100vh - 150px)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
           <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <FileText size={20} /> Create Prescription
           </h3>
@@ -147,6 +149,9 @@ const VetDashboard = () => {
                 <div style={{ backgroundColor: '#f8fafc', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Prescribing for:</p>
                   <p style={{ fontWeight: '600' }}>{selectedQuery.farmer_id?.name} - {selectedQuery.animal_id?.identifier} ({selectedQuery.animal_id?.type})</p>
+                  {selectedQuery.food_type && selectedQuery.food_type !== 'None' && (
+                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: '#92400e', fontWeight: '500' }}>Food Product: {selectedQuery.food_type}</p>
+                  )}
                 </div>
 
                 <div style={{ marginBottom: '1rem' }}>
@@ -173,13 +178,19 @@ const VetDashboard = () => {
                   </div>
                 </div>
 
-                <div style={{ marginBottom: '2rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: '500' }}>Risk Level *</label>
-                  <select className="input-field" value={prescriptionForm.risk_level} onChange={(e) => setPrescriptionForm({...prescriptionForm, risk_level: e.target.value})} required>
-                    <option value="Safe Risk">Safe Risk</option>
-                    <option value="Medium Risk">Medium Risk</option>
-                    <option value="High Risk">High Risk</option>
-                  </select>
+                <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: '0.875rem', fontWeight: '500' }}>Lab MRL (Optional)</label>
+                    <input type="text" className="input-field" placeholder="e.g., 150.5" value={prescriptionForm.lab_mrl} onChange={(e) => setPrescriptionForm({...prescriptionForm, lab_mrl: e.target.value})} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: '0.875rem', fontWeight: '500' }}>Risk Level *</label>
+                    <select className="input-field" value={prescriptionForm.risk_level} onChange={(e) => setPrescriptionForm({...prescriptionForm, risk_level: e.target.value})} required>
+                      <option value="Safe Risk">Safe Risk</option>
+                      <option value="Medium Risk">Medium Risk</option>
+                      <option value="High Risk">High Risk</option>
+                    </select>
+                  </div>
                 </div>
 
                 <button type="submit" className="btn-primary" style={{ marginTop: 'auto', padding: '1rem' }}>

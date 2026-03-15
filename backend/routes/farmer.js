@@ -42,7 +42,7 @@ router.get('/vets', async (req, res) => {
 
 router.post('/query', upload.single('audio'), async (req, res) => {
   try {
-    const { vet_id, animal_id, text_message } = req.body;
+    const { vet_id, animal_id, text_message, food_type } = req.body;
     let audio_url = null;
     
     if (req.file) {
@@ -55,7 +55,8 @@ router.post('/query', upload.single('audio'), async (req, res) => {
       vet_id,
       animal_id,
       text_message,
-      audio_url
+      audio_url,
+      food_type
     });
     await query.save();
     res.json(query);
