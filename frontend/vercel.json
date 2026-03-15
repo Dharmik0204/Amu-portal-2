@@ -1,6 +1,9 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "env": {
+    "VITE_API_URL": "https://amu-backend.onrender.com/api"
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
