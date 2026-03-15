@@ -246,7 +246,7 @@ const FarmerDashboard = () => {
                   </div>
                   {q.text_message && <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>"{q.text_message}"</p>}
                   {q.audio_url && (
-                    <audio controls src={`http://localhost:5000${q.audio_url}`} style={{ height: '36px', width: '100%' }} />
+                    <audio controls src={q.audio_url} style={{ height: '36px', width: '100%' }} />
                   )}
                 </div>
               ))}

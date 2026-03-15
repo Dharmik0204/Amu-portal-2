@@ -105,7 +105,7 @@ const VetDashboard = () => {
                 
                 {q.text_message && <p style={{ fontSize: '0.9rem', fontStyle: 'italic', color: 'var(--text-muted)' }}>"{q.text_message}"</p>}
                 {q.audio_url && (
-                  <audio controls src={`http://localhost:5000${q.audio_url}`} style={{ height: '36px', width: '100%', marginTop: '0.5rem' }} />
+                  <audio controls src={q.audio_url} style={{ height: '36px', width: '100%', marginTop: '0.5rem' }} />
                 )}
               </div>
             ))}
