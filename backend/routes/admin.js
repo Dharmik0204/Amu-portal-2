@@ -12,7 +12,7 @@ router.get('/stats', async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalPrescriptions = await Prescription.countDocuments();
-    const activeFarmsCount = await Animal.distinct('farmer_id').length || await Animal.countDocuments();
+    const activeFarmsCount = (await Animal.distinct('farmer_id')).length;
     
     const highRiskAlerts = await Prescription.countDocuments({ risk_level: 'High Risk' });
 

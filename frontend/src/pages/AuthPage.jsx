@@ -15,11 +15,14 @@ const AuthPage = () => {
     e.preventDefault();
     setError('');
     try {
+      let data;
       if (isLogin) {
-        const { data } = await api.post('/auth/login', { email: formData.email, password: formData.password });
+        const response = await api.post('/auth/login', { email: formData.email, password: formData.password });
+        data = response.data;
         login(data.user, data.token);
       } else {
-        const { data } = await api.post('/auth/register', formData);
+        const response = await api.post('/auth/register', formData);
+        data = response.data;
         login(data.user, data.token);
       }
       navigate(`/${data.user.role}`);

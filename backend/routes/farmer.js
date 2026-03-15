@@ -7,10 +7,7 @@ const Query = require('../models/Query');
 const Prescription = require('../models/Prescription');
 const User = require('../models/User');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-});
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.use(authMiddleware, roleMiddleware(['farmer']));
@@ -46,7 +43,12 @@ router.get('/vets', async (req, res) => {
 router.post('/query', upload.single('audio'), async (req, res) => {
   try {
     const { vet_id, animal_id, text_message } = req.body;
-    const audio_url = req.file ? `/uploads/${req.file.filename}` : null;
+    let audio_url = null;
+    
+    if (req.file) {
+      const base64Audio = req.file.buffer.toString('base64');
+      audio_url = `data:${req.file.mimetype};base64,${base64Audio}`;
+    }
     
     const query = new Query({
       farmer_id: req.user.id,
@@ -58,6 +60,7 @@ router.post('/query', upload.single('audio'), async (req, res) => {
     await query.save();
     res.json(query);
   } catch (err) {
+    console.error('Query Creation Error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

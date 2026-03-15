@@ -5,7 +5,7 @@ const prescriptionSchema = new mongoose.Schema({
   farmer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   vet_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   animal_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal', required: true },
-  medical_store_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  medical_store_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   medicine_name: { type: String, required: true },
   dosage: { type: String, required: true },
   withdrawal_period: { type: String, required: true }, // e.g., "4 days"
