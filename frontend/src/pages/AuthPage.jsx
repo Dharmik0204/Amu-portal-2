@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Activity, Lock, User, Mail } from 'lucide-react';
+import { Activity, Lock, User, Mail, Eye, EyeOff } from 'lucide-react';
 import api from '../api';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'farmer', mobile: '' });
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -118,14 +119,29 @@ const AuthPage = () => {
 
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ fontSize: '0.875rem', fontWeight: '500', color: 'var(--text-dark)' }}>Password</label>
-            <input 
-              type="password" 
-              className="input-field" 
-              placeholder="••••••••" 
-              value={formData.password} 
-              onChange={(e) => setFormData({...formData, password: e.target.value})} 
-              required 
-            />
+            <div style={{ position: 'relative' }}>
+              <input 
+                type={showPassword ? 'text' : 'password'} 
+                className="input-field" 
+                placeholder="••••••••" 
+                value={formData.password} 
+                onChange={(e) => setFormData({...formData, password: e.target.value})} 
+                required 
+                style={{ paddingRight: '2.75rem' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem',
+                  color: 'var(--text-muted)', display: 'flex', alignItems: 'center'
+                }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           {!isLogin && (

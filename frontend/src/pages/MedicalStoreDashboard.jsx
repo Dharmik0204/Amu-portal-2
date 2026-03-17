@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import api from '../api';
-import { Package, Pill, CheckCircle } from 'lucide-react';
+import { Package, Pill, CheckCircle, Trash2 } from 'lucide-react';
 
 const MedicalStoreDashboard = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -25,6 +25,16 @@ const MedicalStoreDashboard = () => {
       fetchPrescriptions();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleDeletePrescription = async (id) => {
+    if (!window.confirm('Delete this dispensed prescription record?')) return;
+    try {
+      await api.delete(`/medical/prescription/${id}`);
+      fetchPrescriptions();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete');
     }
   };
 
@@ -120,7 +130,16 @@ const MedicalStoreDashboard = () => {
                   <h5 style={{ fontWeight: '600', fontSize: '0.95rem' }}>{px.medicine_name} - {px.dosage}</h5>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Given to {px.farmer_id?.name} for {px.animal_id?.type}</p>
                 </div>
-                <span className="badge badge-success">Dispensed</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span className="badge badge-success">Dispensed</span>
+                  <button
+                    onClick={() => handleDeletePrescription(px._id)}
+                    title="Delete dispensed record"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem', color: '#ef4444', display: 'flex', alignItems: 'center' }}
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               </div>
             ))}
             {dispensedPrescriptions.length === 0 && <p style={{ color: 'var(--text-muted)' }}>No recent activity.</p>}

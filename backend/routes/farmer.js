@@ -88,4 +88,16 @@ router.get('/prescriptions', async (req, res) => {
   }
 });
 
+router.delete('/query/:id', async (req, res) => {
+  try {
+    const query = await Query.findOne({ _id: req.params.id, farmer_id: req.user.id });
+    if (!query) return res.status(404).json({ error: 'Query not found' });
+    if (query.status !== 'Responded') return res.status(400).json({ error: 'Only completed queries can be deleted' });
+    await Query.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Query deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

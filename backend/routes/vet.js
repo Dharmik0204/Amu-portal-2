@@ -67,4 +67,21 @@ router.post('/prescription', async (req, res) => {
   }
 });
 
+router.delete('/query/:id', async (req, res) => {
+  try {
+    const query = await Query.findOne({ _id: req.params.id, vet_id: req.user.id });
+    if (!query) return res.status(404).json({ error: 'Query not found' });
+    // Only allow deleting if the prescription for this query is dispensed
+    const prescription = await Prescription.findOne({ query_id: req.params.id });
+    if (!prescription || prescription.status !== 'Dispensed') {
+      return res.status(400).json({ error: 'Only dispensed queries can be deleted' });
+    }
+    await Prescription.findByIdAndDelete(prescription._id);
+    await Query.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Query deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

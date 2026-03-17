@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Layout from '../components/Layout';
 import api from '../api';
-import { Plus, Mic, Send, Play } from 'lucide-react';
+import { Plus, Mic, Send, Play, Trash2 } from 'lucide-react';
 
 const FarmerDashboard = () => {
   const [animals, setAnimals] = useState([]);
@@ -101,6 +101,16 @@ const FarmerDashboard = () => {
       fetchData();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleDeleteQuery = async (id) => {
+    if (!window.confirm('Delete this completed query?')) return;
+    try {
+      await api.delete(`/farmer/query/${id}`);
+      fetchData();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete');
     }
   };
 
@@ -252,9 +262,20 @@ const FarmerDashboard = () => {
                       <span className="badge badge-success">{q.animal_id?.identifier}</span>
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>To: {q.vet_id?.name}</span>
                     </div>
-                    <span className="badge badge-default">{q.status}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span className="badge badge-default">{q.status}</span>
+                      {q.status === 'Responded' && (
+                        <button
+                          onClick={() => handleDeleteQuery(q._id)}
+                          title="Delete completed query"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem', color: '#ef4444', display: 'flex', alignItems: 'center' }}
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  {q.text_message && <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>"{q.text_message}"</p>}
+                  {q.text_message && <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>"{ q.text_message}"</p>}
                   {q.audio_url && (
                     <audio controls src={q.audio_url} style={{ height: '36px', width: '100%' }} />
                   )}

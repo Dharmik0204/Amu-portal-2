@@ -31,4 +31,16 @@ router.put('/dispense/:id', async (req, res) => {
   }
 });
 
+router.delete('/prescription/:id', async (req, res) => {
+  try {
+    const prescription = await Prescription.findOne({ _id: req.params.id, medical_store_id: req.user.id });
+    if (!prescription) return res.status(404).json({ error: 'Prescription not found' });
+    if (prescription.status !== 'Dispensed') return res.status(400).json({ error: 'Only dispensed prescriptions can be deleted' });
+    await Prescription.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Prescription deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

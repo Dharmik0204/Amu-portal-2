@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import api from '../api';
-import { FileText, Stethoscope } from 'lucide-react';
+import { FileText, Stethoscope, Trash2 } from 'lucide-react';
 
 const VetDashboard = () => {
   const [queries, setQueries] = useState([]);
@@ -62,6 +62,17 @@ const VetDashboard = () => {
     }
   };
 
+  const handleDeleteQuery = async (id) => {
+    if (!window.confirm('Delete this dispensed query and its prescription?')) return;
+    try {
+      await api.delete(`/vet/query/${id}`);
+      setSelectedQuery(null);
+      fetchQueries();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete');
+    }
+  };
+
   return (
     <Layout>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -93,9 +104,20 @@ const VetDashboard = () => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                   <h4 style={{ fontWeight: '600' }}>{q.farmer_id?.name}</h4>
-                  <span className="badge badge-default" style={{ backgroundColor: q.status === 'Pending' ? '#fcf0e3' : (q.prescription_status === 'Dispensed' ? '#e6f4ef' : '#e2e8f0'), color: q.status === 'Pending' ? 'var(--warning)' : (q.prescription_status === 'Dispensed' ? 'var(--success)' : 'var(--text-muted)') }}>
-                    {q.status === 'Pending' ? 'Pending' : (q.prescription_status === 'Dispensed' ? 'Dispensed' : 'Responded')}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span className="badge badge-default" style={{ backgroundColor: q.status === 'Pending' ? '#fcf0e3' : (q.prescription_status === 'Dispensed' ? '#e6f4ef' : '#e2e8f0'), color: q.status === 'Pending' ? 'var(--warning)' : (q.prescription_status === 'Dispensed' ? 'var(--success)' : 'var(--text-muted)') }}>
+                      {q.status === 'Pending' ? 'Pending' : (q.prescription_status === 'Dispensed' ? 'Dispensed' : 'Responded')}
+                    </span>
+                    {q.prescription_status === 'Dispensed' && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeleteQuery(q._id); }}
+                        title="Delete dispensed query"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem', color: '#ef4444', display: 'flex', alignItems: 'center' }}
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>

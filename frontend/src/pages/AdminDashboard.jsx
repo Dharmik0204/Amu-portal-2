@@ -119,7 +119,7 @@ const AdminDashboard = () => {
           <p style={{ color: 'var(--text-muted)' }}>System-wide monitoring of Antimicrobial Use (AMU) and user activity.</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button onClick={() => { setAllData(null); setError(null); fetchStats(); fetchAllData(); }} className="btn-outline" style={{ padding: '0.6rem 1.2rem' }}>Force Refresh</button>
+          <button onClick={() => { setAllData({ users: [], animals: [], queries: [], prescriptions: [] }); setError(null); fetchStats(); fetchAllData(); }} className="btn-outline" style={{ padding: '0.6rem 1.2rem' }}>Force Refresh</button>
 
           <div style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '12px' }}>
             <Shield size={28} color="#8b5cf6" style={{ opacity: 0.3 }} />
@@ -294,7 +294,7 @@ const AdminDashboard = () => {
             ))}
           </div>
           <button 
-            onClick={() => { setAllData(null); fetchAllData(); }} 
+            onClick={() => { setAllData({ users: [], animals: [], queries: [], prescriptions: [] }); fetchAllData(); }} 
             style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', color: '#3b82f6', background: 'none', border: '1px solid #3b82f6', borderRadius: '4px', cursor: 'pointer' }}
           >
             Refresh Data
