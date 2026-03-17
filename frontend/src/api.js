@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+// ✅ FINAL BACKEND URL (your Render link)
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://amu-portal-2.onrender.com/api',
 });
 
+// ✅ Attach token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
